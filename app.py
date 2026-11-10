@@ -12,7 +12,7 @@ try:
     if "GROQ_API_KEY" in st.secrets:
         os.environ["GROQ_API_KEY"] = st.secrets["GROQ_API_KEY"]
 except Exception:
-    pass  # no secrets file locally - llm.py uses .env instead
+    pass 
 
 from pipeline import CHUNKS, get_answer  # noqa: E402  (import after the key is set)
 from retrieval import KNOWLEDGE_DIR      # noqa: E402
@@ -182,7 +182,6 @@ st.title(":material/format_paint: CleanSite")
 st.write("Leftover paint, solvent, or rags? Get plain-English disposal steps "
          "for Centre County, with the source right underneath.")
 
-# "How it works" strip. Columns sit side by side on a laptop and stack on a phone.
 col1, col2, col3 = st.columns(3)
 col1.markdown(":material/edit_note: **1. Describe it**  \nIn your own words")
 col2.markdown(":material/checklist: **2. Get steps**  \nShort and numbered")
