@@ -8,7 +8,8 @@ Built as my MVP for A-I 285 class at Penn State.
 
 
 <img width="800" height="650" alt="image" src="https://github.com/user-attachments/assets/b2ee2b48-6f49-4479-b903-d453fc5346a5" />
-<img width="800" height="600" alt="image" src="https://github.com/user-attachments/assets/fd88e686-2fa1-4768-a88d-98d54ee8bcf2" />
+<img width="733" height="820" alt="image" src="https://github.com/user-attachments/assets/da5a2638-89aa-4049-8b48-3b6f150f2783" />
+
 
 
 ## How it works
