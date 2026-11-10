@@ -1,0 +1,12 @@
+# Black / white / gray + one accent color (dark blue).
+[theme]
+base = "light"
+primaryColor = "#1E3A8A"            # dark blue: buttons, selected options, links
+backgroundColor = "#FFFFFF"
+secondaryBackgroundColor = "#F1F5F9" # light gray-blue for cards and inputs
+textColor = "#111827"                # near-black for strong contrast
+linkColor = "#1E3A8A"
+borderColor = "#CBD5E1"
+baseFontSize = 17                    # a bit bigger than default, easier to read
+baseRadius = "medium"
+headingFontWeights = 700
