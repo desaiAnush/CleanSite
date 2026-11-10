@@ -1,0 +1,21 @@
+# Secrets - never commit these
+.env
+.streamlit/secrets.toml
+
+# Python clutter
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Mac
+.DS_Store
+
+# Personal / working files - not part of the app
+Claude outputs/
+CleanSite_ClaudeCode_Prompt.md
+CleanSite_Evidence_Document.docx
+*.docx
+# Duplicate copies - the real ones live in knowledge/
+/kb01.md
+/kb02.md
