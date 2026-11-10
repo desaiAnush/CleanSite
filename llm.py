@@ -5,11 +5,9 @@ import re
 from dotenv import load_dotenv
 from groq import Groq
 
-# Change the model here and nowhere else. List: https://console.groq.com/docs/models
 MODEL = "openai/gpt-oss-120b"
 
-# Reads GROQ_API_KEY from the .env file into os.environ (local runs only).
-# On Streamlit Cloud, app.py copies st.secrets into os.environ instead.
+
 load_dotenv()
 
 SYSTEM_PROMPT = """You are CleanSite, a disposal guide for painters and small trade businesses in Centre County, Pennsylvania.
@@ -26,8 +24,7 @@ RULES - follow every one:
 7. Never put phone numbers, fees, prices, addresses, or hours in the steps. Leave them out completely - the app shows them separately, straight from the source.
 8. Reply with ONLY one of: the numbered steps, NOT_COVERED, or a FOLLOW_UP line."""
 
-# Safety net for rule 7: any step with a phone number or a $ amount gets dropped,
-# because those must come straight from the source, never from the AI.
+
 PHONE_OR_PRICE = re.compile(r"\d{3}[-.)\s]\d{3}[-.\s]\d{4}|\$\s?\d")
 
 
@@ -79,9 +76,7 @@ def parse_reply(reply):
     if match:
         return {"type": "follow_up", "question": match.group(1).strip()}
 
-    # Grab lines that start with "1." / "2)" etc. and keep just the text.
     steps = re.findall(r"^\s*\d+[.)]\s+(.+)$", reply, flags=re.MULTILINE)
-    # The model sometimes uses odd Unicode spaces/hyphens; swap them for plain ones.
     steps = [s.replace("\u202f", " ").replace("\u2011", "-").strip() for s in steps]
     steps = [s for s in steps if not PHONE_OR_PRICE.search(s)]
     if steps:
@@ -96,18 +91,16 @@ def ask_model(user_text, situation, chunks, follow_up_q=None, follow_up_a=None):
     response = client.chat.completions.create(
         model=MODEL,
         messages=[
-            # "system" = standing instructions; "user" = this specific question.
             {"role": "system", "content": SYSTEM_PROMPT},
             {"role": "user", "content": build_user_message(user_text, situation, chunks,
                                                            follow_up_q, follow_up_a)},
         ],
-        # gpt-oss "thinks" before answering. We don't need to see that thinking.
-        # "low" was too sloppy in testing (it invented steps), so we use "medium".
+        # "low" was too sloppy in testing it was making up answers
         reasoning_effort="medium",
         include_reasoning=False,
         max_completion_tokens=2000,
     )
     reply = response.choices[0].message.content or ""    
     result = parse_reply(reply)
-    result["raw"] = reply  # keep the original text for debugging
+    result["raw"] = reply 
     return result
