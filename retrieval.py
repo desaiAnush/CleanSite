@@ -60,7 +60,6 @@ def tokenize(text):
 
 def expand_query(text):
     """Keywords from the user's text, plus extra keywords from SYNONYMS."""
-    # Check synonyms against the plural-stripped text so "rags" matches "rag".
     lowered = " ".join(normalize(w) for w in re.findall(r"[a-z0-9]+", text.lower()))
     terms = tokenize(text)
     for phrase, extra in SYNONYMS.items():
@@ -83,21 +82,9 @@ def read_header_sources(header):
 
 
 def load_chunks():
-    """Read every .md file in knowledge/ and split it into chunks by '## ' heading.
-
-    Each chunk is a plain dict:
-      file     - e.g. "kb02.md"
-      title    - the file's "# " title
-      sources  - source lines from the file header (for the source card)
-      heading  - the "## " heading text
-      text     - the section body, word for word from the file
-    """
     chunks = []
     for path in sorted(KNOWLEDGE_DIR.glob("*.md")):
         content = path.read_text(encoding="utf-8")
-
-        # Split right before each line that starts with "## ".
-        # parts[0] is the header (title + sources); the rest are sections.
         parts = re.split(r"\n(?=## )", content)
         header = parts[0]
         title = header.splitlines()[0].lstrip("# ").strip()
@@ -117,7 +104,7 @@ def load_chunks():
 
 def score_chunk(query_terms, chunk):
     """+1 for each query keyword found in the chunk body,
-    +2 extra if it's also in the heading (headings say what a section is about)."""
+    +2 extra if it's also in the heading (headings say what a section is about)"""
     body_words = tokenize(chunk["text"])
     heading_words = tokenize(chunk["heading"])
     score = 0
@@ -150,7 +137,6 @@ def search(user_text, chunks=None, top_k=TOP_K):
 
 
 if __name__ == "__main__":
-    # Quick check: run `python retrieval.py` and eyeball the results.
     all_chunks = load_chunks()
     print(f"Loaded {len(all_chunks)} chunks from {KNOWLEDGE_DIR.name}/\n")
 
